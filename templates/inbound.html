@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}入库管理{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+    <!-- 入库表单 -->
+    <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border p-6 h-fit">
+        <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+            <i class="fas fa-arrow-down text-green-500"></i> 新增入库
+        </h3>
+        
+        <form action="/inbound/add" method="POST" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium mb-1.5">选择产品</label>
+                <select name="product_id" required class="w-full border rounded-xl px-4 py-2.5">
+                    {% for p in products %}
+                    <option value="{{ p.id }}">{{ p.code }} - {{ p.name }} (库存: {{ p.stock }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium mb-1.5">入库数量</label>
+                <input type="number" name="quantity" min="1" value="10" required 
+                       class="w-full border rounded-xl px-4 py-2.5 text-lg font-medium">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium mb-1.5">备注（可选）</label>
+                <textarea name="note" rows="2" class="w-full border rounded-xl px-4 py-2.5" placeholder="供应商、批次等"></textarea>
+            </div>
+            
+            <button type="submit" class="w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-medium transition-colors">
+                <i class="fas fa-plus mr-2"></i> 确认入库
+            </button>
+        </form>
+    </div>
+
+    <!-- 入库记录 -->
+    <div class="lg:col-span-3 bg-white rounded-2xl shadow-sm border p-6">
+        <h3 class="text-xl font-semibold mb-4">入库记录</h3>
+        
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="border-b text-left text-gray-500">
+                        <th class="py-3 px-4">时间</th>
+                        <th class="py-3 px-4">产品</th>
+                        <th class="py-3 px-4">数量</th>
+                        <th class="py-3 px-4">备注</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y">
+                    {% for r in records %}
+                    <tr>
+                        <td class="py-3 px-4 text-gray-500">{{ r.date.strftime('%m-%d %H:%M') }}</td>
+                        <td class="py-3 px-4 font-medium">{{ r.product.name }}</td>
+                        <td class="py-3 px-4"><span class="text-green-600 font-bold">+{{ r.quantity }}</span></td>
+                        <td class="py-3 px-4 text-gray-500">{{ r.note or '-' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="4" class="py-6 text-center text-gray-400">暂无入库记录</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

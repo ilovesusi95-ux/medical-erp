@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERP 进销存系统 - 网页版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        .nav-active { background-color: #1e40af; color: white; }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- 侧边栏 -->
+        <div class="w-64 bg-gray-900 text-white flex flex-col">
+            <div class="p-6 flex items-center gap-3 border-b border-gray-700">
+                <i class="fas fa-warehouse text-3xl text-blue-400"></i>
+                <div>
+                    <h1 class="text-2xl font-bold">ERP 系统</h1>
+                    <p class="text-xs text-gray-400">进销存管理</p>
+                </div>
+            </div>
+            
+            <nav class="flex-1 p-4 space-y-1">
+                <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-800 transition-colors {% if request.path == '/' %}nav-active{% endif %}">
+                    <i class="fas fa-tachometer-alt w-5"></i>
+                    <span>数据看板</span>
+                </a>
+                <a href="/products" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-800 transition-colors {% if request.path == '/products' %}nav-active{% endif %}">
+                    <i class="fas fa-box w-5"></i>
+                    <span>产品管理</span>
+                </a>
+                <a href="/stock" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-800 transition-colors {% if request.path == '/stock' %}nav-active{% endif %}">
+                    <i class="fas fa-chart-line w-5"></i>
+                    <span>库存查询</span>
+                </a>
+                <a href="/inbound" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-800 transition-colors {% if request.path == '/inbound' %}nav-active{% endif %}">
+                    <i class="fas fa-arrow-down w-5"></i>
+                    <span>入库管理</span>
+                </a>
+                <a href="/outbound" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-800 transition-colors {% if request.path == '/outbound' %}nav-active{% endif %}">
+                    <i class="fas fa-arrow-up w-5"></i>
+                    <span>出库管理</span>
+                </a>
+                <a href="/suppliers" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-800 transition-colors {% if request.path == '/suppliers' %}nav-active{% endif %}">
+                    <i class="fas fa-truck w-5"></i>
+                    <span>供应商管理</span>
+                </a>
+            </nav>
+            
+            <div class="p-4 border-t border-gray-700 text-xs text-gray-400">
+                <p>MacBook M1 Pro 优化版</p>
+                <p class="mt-1">v1.0 • 2026</p>
+            </div>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- 顶部栏 -->
+            <div class="h-16 bg-white border-b flex items-center px-6 justify-between">
+                <div class="flex items-center gap-3">
+                    <h2 class="text-xl font-semibold text-gray-800">{% block title %}{% endblock %}</h2>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2 text-sm text-gray-600">
+                        <i class="fas fa-user-circle text-xl"></i>
+                        <span>管理员</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 内容 -->
+            <div class="flex-1 overflow-auto p-6">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="mb-4 p-4 rounded-xl {% if category == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
