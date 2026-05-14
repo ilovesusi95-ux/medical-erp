@@ -19,6 +19,8 @@
                     <th class="py-3 px-4">单位</th>
                     <th class="py-3 px-4">单价</th>
                     <th class="py-3 px-4">库存价值</th>
+                    <th class="py-3 px-4">销售报量</th>
+                    <th class="py-3 px-4">工厂备货</th>
                 </tr>
             </thead>
             <tbody class="divide-y">
@@ -34,9 +36,11 @@
                     <td class="py-3 px-4">{{ p.unit }}</td>
                     <td class="py-3 px-4">¥{{ "%.2f"|format(p.price) }}</td>
                     <td class="py-3 px-4 font-medium">¥{{ "%.2f"|format(p.stock * p.price) }}</td>
+                    <td class="py-3 px-4 text-center font-medium">{{ p.sales_reported }}</td>
+                    <td class="py-3 px-4 text-center font-medium">{{ p.factory_prep }}</td>
                 </tr>
                 {% else %}
-                <tr><td colspan="6" class="py-8 text-center text-gray-400">暂无库存数据</td></tr>
+                <tr><td colspan="8" class="py-8 text-center text-gray-400">暂无库存数据</td></tr>
                 {% endfor %}
             </tbody>
         </table>

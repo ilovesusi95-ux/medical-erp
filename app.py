@@ -19,6 +19,8 @@ class Product(db.Model):
     price = db.Column(db.Float, default=0.0)
     stock = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    sales_reported = db.Column(db.Integer, default=0)  # 销售报量
+    factory_prep = db.Column(db.Integer, default=0)    # 工厂备货
 
 class Inbound(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -51,10 +53,10 @@ def init_db():
         # 添加示例数据（如果为空）
         if Product.query.count() == 0:
             products = [
-                Product(code='P001', name='无线鼠标', unit='个', price=89.0, stock=120),
-                Product(code='P002', name='机械键盘', unit='个', price=299.0, stock=45),
-                Product(code='P003', name='27寸显示器', unit='台', price=1899.0, stock=18),
-                Product(code='P004', name='USB-C 转接头', unit='个', price=29.0, stock=350),
+                Product(code='P001', name='无线鼠标', unit='个', price=89.0, stock=120, sales_reported=0, factory_prep=0),
+                Product(code='P002', name='机械键盘', unit='个', price=299.0, stock=45, sales_reported=0, factory_prep=0),
+                Product(code='P003', name='27寸显示器', unit='台', price=1899.0, stock=18, sales_reported=0, factory_prep=0),
+                Product(code='P004', name='USB-C 转接头', unit='个', price=29.0, stock=350, sales_reported=0, factory_prep=0),
             ]
             db.session.add_all(products)
             db.session.commit()
@@ -93,7 +95,7 @@ def add_product():
         flash('产品编码已存在！', 'error')
         return redirect(url_for('products'))
     
-    new_product = Product(code=code, name=name, unit=unit, price=price, stock=0)
+    new_product = Product(code=code, name=name, unit=unit, price=price, stock=0, sales_reported=0, factory_prep=0)
     db.session.add(new_product)
     db.session.commit()
     flash('产品添加成功！', 'success')
